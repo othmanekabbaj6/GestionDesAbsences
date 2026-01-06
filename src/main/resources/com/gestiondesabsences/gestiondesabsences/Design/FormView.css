@@ -1,0 +1,39 @@
+/* Root AnchorPane */
+.anchor-pane {
+    -fx-background-color: #f0f9f0; /* soft green */
+    -fx-padding: 20;
+}
+
+/* VBox spacing */
+.v-box {
+    -fx-spacing: 12;
+}
+
+/* Form Labels */
+.label {
+    -fx-text-fill: #1b5e20; /* dark green */
+    -fx-font-weight: bold;
+}
+
+/* TextFields, ComboBoxes & DatePickers */
+.text-field, .combo-box, .date-picker {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #1b5e20;
+    -fx-border-width: 1;
+    -fx-padding: 5 8;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #1b5e20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-padding: 6 15 6 15;
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}

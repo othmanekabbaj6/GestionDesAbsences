@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.AdminModulesController"
+            stylesheets="@../../Design/MainView.css">
+
+    <VBox spacing="15" AnchorPane.topAnchor="15" AnchorPane.leftAnchor="15"
+          AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="15">
+
+        <!-- Action buttons -->
+        <HBox spacing="10">
+            <Button text="Add Module" onAction="#handleCreate"/>
+            <Button text="Delete Module" onAction="#handleDelete"/>
+        </HBox>
+
+        <!-- Modules table -->
+        <TableView fx:id="modulesTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idCol" text="ID"/>
+                <TableColumn fx:id="nameCol" text="Module Name"/>
+                <TableColumn fx:id="majorCol" text="Major"/>
+                <TableColumn fx:id="yearCol" text="School Year"/>
+            </columns>
+        </TableView>
+
+    </VBox>
+</AnchorPane>

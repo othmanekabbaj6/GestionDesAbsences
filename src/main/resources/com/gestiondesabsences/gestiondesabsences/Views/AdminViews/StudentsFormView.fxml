@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.AdminStudentsFormController"
+            stylesheets="@../../Design/FormView.css">
+
+    <HBox spacing="20"
+          AnchorPane.topAnchor="15"
+          AnchorPane.leftAnchor="15"
+          AnchorPane.rightAnchor="15"
+          AnchorPane.bottomAnchor="15">
+
+        <!-- Student Form -->
+        <VBox spacing="12" prefWidth="320">
+
+            <Label text="Student Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+            <TextField fx:id="firstNameField" promptText="First Name"/>
+            <TextField fx:id="lastNameField" promptText="Last Name"/>
+
+            <ComboBox fx:id="majorCombo" promptText="Select Major"/>
+            <ComboBox fx:id="yearCombo" promptText="Select School Year"/>
+            <ComboBox fx:id="classCombo" promptText="Select Class"/>
+
+            <HBox spacing="10">
+                <Button fx:id="actionButton" text="Save" onAction="#handleAction"/>
+                <Button text="Back" onAction="#handleBack"/>
+            </HBox>
+
+        </VBox>
+    </HBox>
+</AnchorPane>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.AdminSchoolYearsFormController"
+            stylesheets="@../../Design/FormView.css">
+
+    <HBox spacing="20"
+          AnchorPane.topAnchor="15"
+          AnchorPane.leftAnchor="15"
+          AnchorPane.rightAnchor="15"
+          AnchorPane.bottomAnchor="15">
+
+        <!-- School Year Form -->
+        <VBox spacing="12" prefWidth="320">
+
+            <Label text="School Year Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+            <ComboBox fx:id="majorCombo" promptText="Select Major"/>
+            <ComboBox fx:id="yearCombo" promptText="Select Year"/>
+
+            <HBox spacing="10">
+                <Button fx:id="actionButton" text="Add" onAction="#handleAdd"/>
+                <Button text="Back" onAction="#handleBack"/>
+            </HBox>
+
+        </VBox>
+    </HBox>
+</AnchorPane>

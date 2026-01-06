@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.AdminMajorsFormController"
+            stylesheets="@../../Design/FormView.css">
+
+    <HBox spacing="20"
+          AnchorPane.topAnchor="15"
+          AnchorPane.leftAnchor="15"
+          AnchorPane.rightAnchor="15"
+          AnchorPane.bottomAnchor="15">
+
+        <!-- Major Form -->
+        <VBox spacing="12" prefWidth="320">
+
+            <Label text="Major Details" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+            <TextField fx:id="majorNameField" promptText="Major Name"/>
+
+            <HBox spacing="10">
+                <Button fx:id="actionButton" text="Add" onAction="#handleAdd"/>
+                <Button text="Back" onAction="#handleBack"/>
+            </HBox>
+
+        </VBox>
+    </HBox>
+</AnchorPane>
+

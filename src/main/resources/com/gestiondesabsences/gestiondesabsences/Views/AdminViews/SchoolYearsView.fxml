@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.AdminSchoolYearsController"
+            stylesheets="@../../Design/MainView.css">
+
+    <VBox spacing="15" AnchorPane.topAnchor="15" AnchorPane.leftAnchor="15"
+          AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="15">
+
+        <!-- Action buttons -->
+        <HBox spacing="10">
+            <Button text="Add School Year" onAction="#handleCreate"/>
+            <Button text="Delete School Year" onAction="#handleDelete"/>
+        </HBox>
+
+        <!-- School Years table -->
+        <TableView fx:id="schoolYearsTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID"/>
+                <TableColumn fx:id="majorColumn" text="Major"/>
+                <TableColumn fx:id="yearColumn" text="Year"/>
+            </columns>
+        </TableView>
+
+    </VBox>
+</AnchorPane>

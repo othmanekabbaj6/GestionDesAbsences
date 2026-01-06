@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefWidth="1050" prefHeight="620"
+            styleClass="root"
+            stylesheets="@../Design/AdminDashboard.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.AdminController">
+
+   <!-- LEFT SIDEBAR -->
+   <left>
+      <VBox spacing="12" prefWidth="180" styleClass="sidebar">
+         <children>
+
+            <Button text="Home" styleClass="sidebar-button"
+                    onAction="#handleHome"/>
+
+            <Button text="Absences" styleClass="sidebar-button"
+                    onAction="#handleAbsences"/>
+
+            <Button text="Students" styleClass="sidebar-button"
+                    onAction="#handleStudents"/>
+
+            <Button text="Modules" styleClass="sidebar-button"
+                    onAction="#handleModules"/>
+
+            <Button text="Classes" styleClass="sidebar-button"
+                    onAction="#handleClasses"/>
+
+            <Button text="School Years" styleClass="sidebar-button"
+                    onAction="#handleSchoolYears"/>
+
+               <Button text="Majors" styleClass="sidebar-button"
+                       onAction="#handleMajors">
+               <VBox.margin>
+                  <Insets bottom="80"/>
+               </VBox.margin>
+            </Button>
+
+            <Button text="Logout" styleClass="sidebar-button logout"
+                    onAction="#handleLogout">
+               <VBox.margin>
+                  <Insets top="120"/>
+               </VBox.margin>
+            </Button>
+
+         </children>
+      </VBox>
+   </left>
+
+   <!-- TOP BAR -->
+   <top>
+      <HBox prefHeight="50" alignment="CENTER_LEFT"
+            styleClass="top-bar">
+         <children>
+            <Label fx:id="welcomeLabel"
+                   styleClass="welcome-label"
+                   text="Welcome"/>
+         </children>
+         <padding>
+            <Insets left="30"/>
+         </padding>
+      </HBox>
+   </top>
+
+   <!-- CENTER CONTENT -->
+   <center>
+      <StackPane fx:id="contentPane"
+                 styleClass="content-area"/>
+   </center>
+
+</BorderPane>

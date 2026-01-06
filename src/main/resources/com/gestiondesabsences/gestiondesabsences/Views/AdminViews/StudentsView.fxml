@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.AdminStudentsController"
+            stylesheets="@../../Design/MainView.css">
+
+    <VBox spacing="15" AnchorPane.topAnchor="15" AnchorPane.leftAnchor="15"
+          AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="15">
+
+        <!-- Action buttons -->
+        <HBox spacing="10">
+            <Button text="Create Student" onAction="#handleCreate"/>
+            <Button text="Update Student" onAction="#handleUpdate"/>
+            <Button text="Delete Student" onAction="#handleDelete"/>
+        </HBox>
+
+        <!-- Students table -->
+        <TableView fx:id="studentsTable" VBox.vgrow="ALWAYS" prefHeight="400">
+            <columns>
+                <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="firstNameCol" text="First Name" prefWidth="120"/>
+                <TableColumn fx:id="lastNameCol" text="Last Name" prefWidth="120"/>
+                <TableColumn fx:id="classCol" text="Class" prefWidth="80"/>
+                <TableColumn fx:id="majorCol" text="Major" prefWidth="100"/>
+                <TableColumn fx:id="yearCol" text="School Year" prefWidth="100"/>
+            </columns>
+        </TableView>
+
+        <!-- This StackPane is for loading the Form dynamically -->
+        <StackPane fx:id="contentPane" VBox.vgrow="ALWAYS"/>
+    </VBox>
+</AnchorPane>
