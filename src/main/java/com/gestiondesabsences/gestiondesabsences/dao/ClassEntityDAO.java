@@ -121,15 +121,15 @@ public class ClassEntityDAO {
                  PreparedStatement psStu = conn.prepareStatement(deleteStudents);
                  PreparedStatement psCls = conn.prepareStatement(deleteClass)) {
 
-                // 1️⃣ Delete absences
+                //  Delete absences
                 psAbs.setInt(1, classId);
                 psAbs.executeUpdate();
 
-                // 2️⃣ Delete students
+                //  Delete students
                 psStu.setInt(1, classId);
                 psStu.executeUpdate();
 
-                // 3️⃣ Delete class
+                //  Delete class
                 psCls.setInt(1, classId);
                 psCls.executeUpdate();
 
@@ -177,4 +177,18 @@ public class ClassEntityDAO {
 
         return classes;
     }
+
+    public int countClasses() {
+        String sql = "SELECT COUNT(*) FROM class_entities";
+        try (Connection c = DatabaseConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

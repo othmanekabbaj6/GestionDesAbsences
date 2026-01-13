@@ -15,44 +15,35 @@ public class ModuleService {
         this.moduleDAO = moduleDAO;
     }
 
-    /**
-     * Fetch all modules from the database.
-     * Returns an empty list if an error occurs.
-     */
     public List<Module> getAllModules() {
         try {
-            List<Module> modules = moduleDAO.getAllModules();
-            return modules != null ? modules : new ArrayList<>();
+            return moduleDAO.getAllModules();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Error fetching modules from the database.");
             return new ArrayList<>();
         }
     }
 
-    /**
-     * Add a new module to the database.
-     * Returns true if successful, false otherwise.
-     */
-    public boolean addModule(Module module) {
-        if (module == null || module.getModuleName() == null || module.getMajor() == null || module.getSchoolYear() == null) {
-            System.err.println("Invalid module data. Cannot add to database.");
-            return false;
+    public List<Module> getModulesByStudentId(int studentId) {
+        try {
+            return moduleDAO.getModulesByStudentId(studentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
+    }
+
+    public boolean addModule(Module module) {
+        if (module == null || module.getModuleName() == null) return false;
         try {
             moduleDAO.addModule(module);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Failed to add module: " + module.getModuleName());
             return false;
         }
     }
 
-    /**
-     * Delete a module by its ID.
-     * Returns true if successful, false otherwise.
-     */
     public boolean deleteModuleCascade(int moduleId) {
         try {
             moduleDAO.deleteModuleCascade(moduleId);
@@ -63,9 +54,12 @@ public class ModuleService {
         }
     }
 
-
-    public List<Module> getModulesByStudentId(int studentId) {
-        return moduleDAO.getModulesByStudentId(studentId);
+    public List<Module> getModulesByMajorAndYear(int majorId, int yearId) {
+        try {
+            return moduleDAO.getModulesByMajorAndYear(majorId, yearId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
 }

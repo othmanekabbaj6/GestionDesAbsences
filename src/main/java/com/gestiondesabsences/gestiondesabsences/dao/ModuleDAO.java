@@ -140,15 +140,14 @@ public class ModuleDAO {
 
     public List<Module> getModulesByStudentId(int studentId) {
         List<Module> modules = new ArrayList<>();
+
         String sql = """
-            SELECT m.id, m.module_name, m.major_id, m.school_year_id,
-                   maj.name as major_name, sy.year_level
-            FROM modules m
-            JOIN student_modules sm ON m.id = sm.module_id
-            JOIN majors maj ON m.major_id = maj.id
-            JOIN school_years sy ON m.school_year_id = sy.id
-            WHERE sm.student_id = ?
-        """;
+        SELECT m.id, m.module_name, m.major_id, m.school_year_id
+        FROM modules m
+        JOIN students s ON s.id = ?
+        WHERE m.major_id = s.major_id
+          AND m.school_year_id = s.school_year_id
+    """;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -157,25 +156,11 @@ public class ModuleDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Major major = new Major();
-                major.setId(rs.getInt("major_id"));
-                major.setName(rs.getString("major_name"));
-                major.setSchoolYears(null);
-
-                SchoolYear year = new SchoolYear();
-                year.setId(rs.getInt("school_year_id"));
-                year.setYearLevel(rs.getString("year_level"));
-                year.setMajor(major);
-                year.setStudents(null);
-                year.setModules(null);
-                year.setClasses(null);
-
                 Module module = new Module();
                 module.setId(rs.getInt("id"));
                 module.setModuleName(rs.getString("module_name"));
-                module.setMajor(major);
-                module.setSchoolYear(year);
 
+                // OPTIONAL: load Major & SchoolYear if you already do this elsewhere
                 modules.add(module);
             }
 
@@ -184,5 +169,64 @@ public class ModuleDAO {
         }
 
         return modules;
+
+
     }
+
+    public List<Module> getModulesByMajorAndYear(int majorId, int yearId) throws SQLException {
+        List<Module> modules = new ArrayList<>();
+
+        String sql = """
+        SELECT m.id, m.module_name,
+               maj.id AS major_id, maj.name AS major_name,
+               sy.id AS year_id, sy.year_level
+        FROM modules m
+        JOIN majors maj ON m.major_id = maj.id
+        JOIN school_years sy ON m.school_year_id = sy.id
+        WHERE m.major_id = ?
+          AND m.school_year_id = ?
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, majorId);
+            stmt.setInt(2, yearId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Module module = new Module();
+                module.setId(rs.getInt("id"));
+                module.setModuleName(rs.getString("module_name"));
+
+                Major major = new Major();
+                major.setId(rs.getInt("major_id"));
+                major.setName(rs.getString("major_name"));
+                module.setMajor(major);
+
+                SchoolYear year = new SchoolYear();
+                year.setId(rs.getInt("year_id"));
+                year.setYearLevel(rs.getString("year_level"));
+                module.setSchoolYear(year);
+
+                modules.add(module);
+            }
+        }
+        return modules;
+    }
+
+    public int countModules() {
+        String sql = "SELECT COUNT(*) FROM modules";
+        try (Connection c = DatabaseConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

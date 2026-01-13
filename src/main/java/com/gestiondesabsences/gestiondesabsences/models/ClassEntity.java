@@ -11,5 +11,10 @@ public class ClassEntity {
     private int id;
     private String className;
 
-    private SchoolYear schoolYear; // linked school year
+    private SchoolYear schoolYear;
+
+    @Override
+    public String toString() {
+        return className;
+    }
 }

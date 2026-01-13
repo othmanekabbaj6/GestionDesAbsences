@@ -1,6 +1,7 @@
 package com.gestiondesabsences.gestiondesabsences.services;
 
 import com.gestiondesabsences.gestiondesabsences.dao.StudentDAO;
+import com.gestiondesabsences.gestiondesabsences.models.Absence;
 import com.gestiondesabsences.gestiondesabsences.models.Student;
 
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ public class StudentService {
         this.studentDAO = new StudentDAO();
     }
 
+    // Get all students
     public List<Student> getAllStudents() {
         try {
             return studentDAO.getAll();
@@ -23,6 +25,7 @@ public class StudentService {
         }
     }
 
+    // Add a student
     public boolean addStudent(Student student) {
         try {
             studentDAO.add(student);
@@ -33,6 +36,7 @@ public class StudentService {
         }
     }
 
+    // Update a student
     public boolean updateStudent(Student student) {
         try {
             studentDAO.update(student);
@@ -43,6 +47,7 @@ public class StudentService {
         }
     }
 
+    // Delete a student by ID
     public boolean deleteStudent(int studentId) {
         try {
             studentDAO.delete(studentId);
@@ -52,4 +57,16 @@ public class StudentService {
             return false;
         }
     }
+
+    // Get a student by email (for login)
+    public Student getStudentByEmail(String email) {
+        try {
+            return studentDAO.getStudentByEmail(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }

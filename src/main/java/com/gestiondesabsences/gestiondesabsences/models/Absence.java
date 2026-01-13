@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class Absence {
     private int id;
     private LocalDate date;
-
     private Student student;
     private Module module;
+
 }

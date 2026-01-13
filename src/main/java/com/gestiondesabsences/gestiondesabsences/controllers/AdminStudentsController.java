@@ -6,12 +6,10 @@ import com.gestiondesabsences.gestiondesabsences.services.StudentService;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -29,7 +27,12 @@ public class AdminStudentsController {
     @FXML private TableColumn<Student, String> majorCol;
     @FXML private TableColumn<Student, String> yearCol;
 
+    @FXML private TextField searchField; // <-- Add searchField
+
     private final StudentService studentService = new StudentService();
+    private ObservableList<Student> masterList; // <-- Add masterList
+
+    private FilteredList<Student> filteredList; // For live search
 
     @FXML
     public void initialize() {
@@ -57,16 +60,36 @@ public class AdminStudentsController {
             return new ReadOnlyStringWrapper(yearLevel);
         });
 
-        // Load all students into the table
+        // Load all students into master list
         loadStudents();
+
+        // Setup search listener
+        setupSearch();
     }
 
     private void loadStudents() {
         List<Student> students = studentService.getAllStudents();
         if (students != null) {
-            ObservableList<Student> observableList = FXCollections.observableArrayList(students);
-            studentsTable.setItems(observableList);
+            masterList = FXCollections.observableArrayList(students);
+            filteredList = new FilteredList<>(masterList, s -> true); // initially no filter
+            studentsTable.setItems(filteredList);
         }
+    }
+
+    private void setupSearch() {
+        searchField.textProperty().addListener((obs, oldText, newText) -> {
+            String keyword = newText.toLowerCase().trim();
+
+            filteredList.setPredicate(student -> {
+                if (keyword.isEmpty()) return true;
+
+                // Search by first name, last name, or full name
+                String fullName = (student.getFirstName() + " " + student.getLastName()).toLowerCase();
+                return student.getFirstName().toLowerCase().contains(keyword)
+                        || student.getLastName().toLowerCase().contains(keyword)
+                        || fullName.contains(keyword);
+            });
+        });
     }
 
     @FXML
@@ -104,7 +127,7 @@ public class AdminStudentsController {
             showAlert(success ? "Deleted" : "Error",
                     success ? "Student deleted successfully!" : "Failed to delete student.",
                     success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
-            if (success) loadStudents();
+            if (success) refreshTable();
         }
     }
 

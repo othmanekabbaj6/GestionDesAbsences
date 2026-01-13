@@ -8,14 +8,16 @@ import com.gestiondesabsences.gestiondesabsences.services.ModuleService;
 import com.gestiondesabsences.gestiondesabsences.services.StudentService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AdminAbsencesFormController {
 
@@ -29,102 +31,103 @@ public class AdminAbsencesFormController {
     private AdminAbsencesController parentController;
 
     private final StudentService studentService = new StudentService();
-    private final ModuleService moduleService = new ModuleService(new com.gestiondesabsences.gestiondesabsences.dao.ModuleDAO());
+    private final ModuleService moduleService =
+            new ModuleService(new com.gestiondesabsences.gestiondesabsences.dao.ModuleDAO());
     private final AbsenceService absenceService = new AbsenceService();
 
     private final ObservableList<Student> students = FXCollections.observableArrayList();
     private final ObservableList<Module> modules = FXCollections.observableArrayList();
 
+    private FilteredList<Student> filteredStudents;
+
     @FXML
     public void initialize() {
-        // Load all students
-        List<Student> studentList = studentService.getAllStudents();
-        if (studentList != null) {
-            students.setAll(studentList);
-            studentCombo.setItems(students);
-        }
 
-        // Load all modules (we will filter later)
+        /* ================= STUDENTS ================= */
+        students.setAll(studentService.getAllStudents());
+        filteredStudents = new FilteredList<>(students, s -> true);
+
+        studentCombo.setItems(filteredStudents);
+        studentCombo.setEditable(true);
+
+
+        studentCombo.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Student s) {
+                if (s == null) return "";
+                return s.getFirstName() + " " + s.getLastName();
+            }
+
+            @Override
+            public Student fromString(String string) {
+                return studentCombo.getValue();
+            }
+        });
+
+        /* ================= AUTOCOMPLETE ================= */
+        studentCombo.getEditor().textProperty().addListener((obs, old, text) -> {
+            if (studentCombo.getValue() != null &&
+                    text.equals(studentCombo.getConverter().toString(studentCombo.getValue()))) {
+                return;
+            }
+
+            filteredStudents.setPredicate(s ->
+                    text == null || text.isEmpty()
+                            || (s.getFirstName() + " " + s.getLastName())
+                            .toLowerCase().contains(text.toLowerCase())
+            );
+
+            if (!filteredStudents.isEmpty()) {
+                studentCombo.show();
+            }
+        });
+
+        /* ================= STUDENT DISPLAY ================= */
+        studentCombo.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Student s, boolean empty) {
+                super.updateItem(s, empty);
+                setText(empty || s == null ? "" :
+                        s.getFirstName() + " " + s.getLastName()
+                                + " | " + s.getMajor().getName()
+                                + " | " + s.getSchoolYear().getYearLevel());
+            }
+        });
+
+        /* ================= MODULE ================= */
         moduleCombo.setItems(modules);
         moduleCombo.setDisable(true);
 
-        // Make studentCombo editable
-        studentCombo.setEditable(true);
-
-        // StringConverter for Student (display + parse typed text)
-        studentCombo.setConverter(new StringConverter<>() {
+        moduleCombo.setCellFactory(lv -> new ListCell<>() {
             @Override
-            public String toString(Student student) {
-                if (student == null) return "";
-                String major = student.getMajor() != null ? student.getMajor().getName() : "Unknown";
-                String year = student.getSchoolYear() != null ? student.getSchoolYear().getYearLevel() : "Unknown";
-                return student.getFirstName() + " " + student.getLastName() + " | " + major + " | " + year;
-            }
-
-            @Override
-            public Student fromString(String typed) {
-                if (typed == null || typed.isEmpty()) return null;
-                String trimmed = typed.trim().toLowerCase();
-                for (Student s : students) {
-                    String fullName = (s.getFirstName() + " " + s.getLastName()).toLowerCase();
-                    if (fullName.equals(trimmed)) {
-                        return s;
-                    }
-                }
-                return null;
-            }
-        });
-
-        // Custom cell for student display
-        studentCombo.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Student item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText("");
-                } else {
-                    String major = item.getMajor() != null ? item.getMajor().getName() : "Unknown";
-                    String year = item.getSchoolYear() != null ? item.getSchoolYear().getYearLevel() : "Unknown";
-                    setText(item.getFirstName() + " " + item.getLastName() + " | " + major + " | " + year);
-                }
-            }
-        });
-        studentCombo.setButtonCell(studentCombo.getCellFactory().call(null));
-
-        // Custom cell for module display
-        moduleCombo.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Module item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText("");
-                } else {
-                    setText(item.getModuleName());
-                }
+            protected void updateItem(Module m, boolean empty) {
+                super.updateItem(m, empty);
+                setText(empty || m == null ? "" : m.getModuleName());
             }
         });
         moduleCombo.setButtonCell(moduleCombo.getCellFactory().call(null));
 
-        // Listen to student selection -> filter modules
-        studentCombo.valueProperty().addListener((obs, oldStudent, newStudent) -> {
-            loadModulesForStudent(newStudent);
+        /* ================= STUDENT SELECT ================= */
+        studentCombo.valueProperty().addListener((obs, old, student) -> {
+            if (student != null) {
+                loadModulesForStudent(student);
+            }
         });
     }
 
-    /** Filter modules based on the selected student */
+    /* ================= LOAD MODULES ================= */
     private void loadModulesForStudent(Student student) {
         modules.clear();
         moduleCombo.setDisable(true);
 
-        if (student != null) {
-            List<Module> studentModules = moduleService.getModulesByStudentId(student.getId());
-            if (studentModules != null) {
-                modules.setAll(studentModules);
-                moduleCombo.setDisable(false);
-            }
+        List<Module> list = moduleService.getModulesByStudentId(student.getId());
+        if (list != null && !list.isEmpty()) {
+            modules.setAll(list);
+            moduleCombo.setDisable(false);
         }
     }
 
+    /* ================= FORM MODE ================= */
     public void setMode(String mode) {
         this.mode = mode;
         actionButton.setText("CREATE".equals(mode) ? "Save" : "Update");
@@ -140,6 +143,7 @@ public class AdminAbsencesFormController {
         this.parentController = controller;
     }
 
+    /* ================= ACTION ================= */
     @FXML
     void handleAction() {
         Student student = studentCombo.getValue();
@@ -152,61 +156,62 @@ public class AdminAbsencesFormController {
         }
 
         if ("CREATE".equals(mode)) {
-            Absence newAbsence = new Absence();
-            newAbsence.setStudent(student);
-            newAbsence.setModule(module);
-            newAbsence.setDate(date);
-
-            boolean success = absenceService.add(newAbsence);
-            showAlert(success ? "Success" : "Error",
-                    success ? "Absence added!" : "Failed to add absence",
-                    success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
-
-        } else if ("UPDATE".equals(mode) && absence != null) {
+            Absence a = new Absence();
+            a.setStudent(student);
+            a.setModule(module);
+            a.setDate(date);
+            absenceService.add(a);
+        } else {
             absence.setStudent(student);
             absence.setModule(module);
             absence.setDate(date);
-
-            boolean success = absenceService.update(absence);
-            showAlert(success ? "Success" : "Error",
-                    success ? "Absence updated!" : "Failed to update absence",
-                    success ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
+            absenceService.update(absence);
         }
 
         if (parentController != null) parentController.refreshTable();
         handleBack();
     }
 
+    /* ================= UPDATE MODE ================= */
     private void populateForm() {
-        if (absence != null) {
-            studentCombo.setValue(absence.getStudent());
-            moduleCombo.setValue(absence.getModule());
-            datePicker.setValue(absence.getDate());
-        }
+        studentCombo.setValue(absence.getStudent());
+        loadModulesForStudent(absence.getStudent());
+        moduleCombo.setValue(absence.getModule());
+        datePicker.setValue(absence.getDate());
     }
 
     private void clearForm() {
-        studentCombo.getSelectionModel().clearSelection();
+        studentCombo.setValue(null);
+        filteredStudents.setPredicate(s -> true);
         moduleCombo.getSelectionModel().clearSelection();
         moduleCombo.setDisable(true);
         datePicker.setValue(null);
     }
 
+    /* ================= BACK ================= */
     @FXML
     void handleBack() {
         try {
-            StackPane contentPane = (StackPane) actionButton.getScene().lookup("#contentPane");
-            contentPane.getChildren().clear();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/com/gestiondesabsences/gestiondesabsences/Views/AdminViews/AbsencesView.fxml"
+            ));
+            AnchorPane view = loader.load();
+
+            StackPane contentPane =
+                    (StackPane) actionButton.getScene().lookup("#contentPane");
+
+            contentPane.getChildren().setAll(view);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void showAlert(String title, String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    private void showAlert(String title, String msg, Alert.AlertType type) {
+        Alert a = new Alert(type);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.setContentText(msg);
+        a.showAndWait();
     }
 }

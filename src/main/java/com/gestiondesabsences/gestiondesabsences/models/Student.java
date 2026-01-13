@@ -20,4 +20,14 @@ public class Student {
     private ClassEntity classEntity;
     // A student can have multiple absences
     private List<Absence> absences;
+    private String email;
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    @Override
+    public String toString() {
+        return getFullName();
+    }
 }

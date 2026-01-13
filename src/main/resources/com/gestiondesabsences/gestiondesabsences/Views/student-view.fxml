@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
 
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.StudentController"
+            prefWidth="800" prefHeight="600">
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label layoutX="286.0" layoutY="192.0" text="Student" />
-   </children>
+   <VBox spacing="20" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+      <!-- Student Info Section -->
+      <VBox spacing="10">
+         <Label text="My Information" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+         <GridPane hgap="10" vgap="10">
+            <Label text="Full Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label fx:id="fullNameLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Class:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Label fx:id="classLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Major:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Label fx:id="majorLabel" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="School Year:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <Label fx:id="yearLabel" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+         </GridPane>
+      </VBox>
+
+      <Separator/>
+
+      <!-- Absences Table Section -->
+      <VBox spacing="10">
+         <Label text="My Absences" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+         <TableView fx:id="absencesTable" prefHeight="300">
+            <columns>
+               <TableColumn fx:id="moduleCol" text="Module" prefWidth="150"/>
+               <TableColumn fx:id="dateCol" text="Date" prefWidth="120"/>
+               <TableColumn fx:id="reasonCol" text="Reason" prefWidth="200"/>
+            </columns>
+         </TableView>
+      </VBox>
+   </VBox>
 </AnchorPane>

@@ -8,59 +8,71 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400" prefWidth="600" stylesheets="@../../Design/AdminDashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="400"
+            prefWidth="600"
+            stylesheets="@../../Design/AdminDashboard.css"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.AdminDashboardController">
 
-    <!-- GridPane filling the AnchorPane -->
-    <GridPane alignment="CENTER" hgap="25" vgap="25" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <GridPane alignment="CENTER"
+              hgap="25"
+              vgap="25"
+              AnchorPane.topAnchor="0.0"
+              AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0">
 
-        <!-- Total Students -->
-        <VBox alignment="CENTER" prefHeight="120" prefWidth="220" stylesheets="@../../Design/AdminDashboard.css">
-            <Label styleClass="card-title" text="Total Students" />
-            <Label styleClass="card-value" text="120" />
-         <styleClass>
-            <String fx:value="dashboard-card" />
-            <String fx:value="blue" />
-         </styleClass>
+        <!-- TOTAL STUDENTS -->
+        <VBox alignment="CENTER" prefHeight="120" prefWidth="220">
+            <Label text="Total Students" styleClass="card-title"/>
+            <Label fx:id="studentsCountLabel" text="0" styleClass="card-value"/>
+            <styleClass>
+                <String fx:value="dashboard-card"/>
+                <String fx:value="blue"/>
+            </styleClass>
         </VBox>
 
-        <!-- Total Classes -->
-        <VBox alignment="CENTER" prefHeight="120" prefWidth="220" stylesheets="@../../Design/AdminDashboard.css" GridPane.columnIndex="1">
-            <Label styleClass="card-title" text="Total Classes" />
-            <Label styleClass="card-value" text="8" />
-         <styleClass>
-            <String fx:value="dashboard-card" />
-            <String fx:value="purple" />
-         </styleClass>
+        <!-- TOTAL CLASSES -->
+        <VBox alignment="CENTER" prefHeight="120" prefWidth="220" GridPane.columnIndex="1">
+            <Label text="Total Classes" styleClass="card-title"/>
+            <Label fx:id="classesCountLabel" text="0" styleClass="card-value"/>
+            <styleClass>
+                <String fx:value="dashboard-card"/>
+                <String fx:value="purple"/>
+            </styleClass>
         </VBox>
 
-        <!-- Majors -->
-        <VBox alignment="CENTER" prefHeight="120" prefWidth="220" stylesheets="@../../Design/AdminDashboard.css" GridPane.rowIndex="1">
-            <Label styleClass="card-title" text="Total Majors" />
-            <Label styleClass="card-value" text="5" />
-         <styleClass>
-            <String fx:value="dashboard-card" />
-            <String fx:value="green" />
-         </styleClass>
+        <!-- TOTAL MAJORS -->
+        <VBox alignment="CENTER" prefHeight="120" prefWidth="220" GridPane.rowIndex="1">
+            <Label text="Total Majors" styleClass="card-title"/>
+            <Label fx:id="majorsCountLabel" text="0" styleClass="card-value"/>
+            <styleClass>
+                <String fx:value="dashboard-card"/>
+                <String fx:value="green"/>
+            </styleClass>
         </VBox>
 
-        <!-- Inactive Students -->
-        <VBox alignment="CENTER" prefHeight="120" prefWidth="220" stylesheets="@../../Design/AdminDashboard.css" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <Label styleClass="card-title" text="Total Modules" />
-            <Label styleClass="card-value" text="3" />
-         <styleClass>
-            <String fx:value="dashboard-card" />
-            <String fx:value="red" />
-         </styleClass>
+        <!-- TOTAL MODULES -->
+        <VBox alignment="CENTER" prefHeight="120" prefWidth="220"
+              GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label text="Total Modules" styleClass="card-title"/>
+            <Label fx:id="modulesCountLabel" text="0" styleClass="card-value"/>
+            <styleClass>
+                <String fx:value="dashboard-card"/>
+                <String fx:value="red"/>
+            </styleClass>
         </VBox>
-      <columnConstraints>
-         <ColumnConstraints />
-         <ColumnConstraints />
-      </columnConstraints>
-      <rowConstraints>
-         <RowConstraints />
-         <RowConstraints />
-      </rowConstraints>
+
+        <columnConstraints>
+            <ColumnConstraints/>
+            <ColumnConstraints/>
+        </columnConstraints>
+
+        <rowConstraints>
+            <RowConstraints/>
+            <RowConstraints/>
+        </rowConstraints>
 
     </GridPane>
-
 </AnchorPane>

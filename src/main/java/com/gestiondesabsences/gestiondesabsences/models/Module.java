@@ -13,4 +13,9 @@ public class Module {
 
     private Major major;
     private SchoolYear schoolYear;
+
+    @Override
+    public String toString() {
+        return moduleName;
+    }
 }
