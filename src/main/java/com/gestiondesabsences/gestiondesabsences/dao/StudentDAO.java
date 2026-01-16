@@ -242,4 +242,68 @@ public class StudentDAO {
         }
         return 0;
     }
+
+
+    public Student getStudentByName(String firstName, String lastName) throws SQLException {
+
+        String sql = """
+        SELECT 
+            s.id, s.first_name, s.last_name, s.email,
+            c.id AS class_id, c.class_name,
+            m.id AS major_id, m.name AS major_name,
+            sy.id AS year_id, sy.year_level
+        FROM students s
+        JOIN class_entities c ON s.class_id = c.id
+        JOIN majors m ON s.major_id = m.id
+        JOIN school_years sy ON s.school_year_id = sy.id
+        WHERE s.first_name ILIKE ?
+          AND s.last_name  ILIKE ?
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + firstName + "%");
+            stmt.setString(2, "%" + lastName + "%");
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                // Major
+                Major major = new Major(
+                        rs.getInt("major_id"),
+                        rs.getString("major_name"),
+                        null
+                );
+
+                // School year
+                SchoolYear year = new SchoolYear();
+                year.setId(rs.getInt("year_id"));
+                year.setYearLevel(rs.getString("year_level"));
+                year.setMajor(major);
+
+                // Class
+                ClassEntity classEntity = new ClassEntity();
+                classEntity.setId(rs.getInt("class_id"));
+                classEntity.setClassName(rs.getString("class_name"));
+                classEntity.setSchoolYear(year);
+
+                // Student
+                Student student = new Student();
+                student.setId(rs.getInt("id"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setLastName(rs.getString("last_name"));
+                student.setEmail(rs.getString("email"));
+                student.setMajor(major);
+                student.setSchoolYear(year);
+                student.setClassEntity(classEntity);
+                student.setAbsences(new ArrayList<>());
+
+                return student;
+            }
+        }
+        return null;
+    }
+
 }

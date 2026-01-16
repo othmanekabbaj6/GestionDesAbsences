@@ -8,7 +8,9 @@ import com.gestiondesabsences.gestiondesabsences.utils.DatabaseConnection;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AbsenceDAO {
 
@@ -110,5 +112,35 @@ public class AbsenceDAO {
             }
         }
         return null;
+    }
+
+
+    public Map<String, Integer> getAbsenceStatsByStudent(int studentId) throws SQLException {
+
+        Map<String, Integer> stats = new LinkedHashMap<>();
+
+        String sql = """
+        SELECT m.module_name AS module_name, COUNT(a.id) AS absence_count
+        FROM absences a
+        JOIN modules m ON a.module_id = m.id
+        WHERE a.student_id = ?
+        GROUP BY m.module_name
+        ORDER BY absence_count DESC
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                stats.put(
+                        rs.getString("module_name"),
+                        rs.getInt("absence_count")
+                );
+            }
+        }
+        return stats;
     }
 }

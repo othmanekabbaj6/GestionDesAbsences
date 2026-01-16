@@ -95,6 +95,11 @@ public class AdminController {
         loadView("SchoolYearsView.fxml");
     }
 
+    @FXML
+    void handleSearch() {
+        loadView("StudentSearchView.fxml");
+    }
+
     // Fixed logout
     @FXML
     private void handleLogout() {

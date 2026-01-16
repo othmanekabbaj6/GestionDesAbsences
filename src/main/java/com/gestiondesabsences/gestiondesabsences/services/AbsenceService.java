@@ -5,6 +5,7 @@ import com.gestiondesabsences.gestiondesabsences.models.Absence;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class AbsenceService {
 
@@ -59,6 +60,15 @@ public class AbsenceService {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+
+    public Map<String, Integer> getStudentAbsenceStats(int studentId) {
+        try {
+            return absenceDAO.getAbsenceStatsByStudent(studentId);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to load absence statistics", e);
         }
     }
 }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane
+        xmlns="http://javafx.com/javafx/17"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.gestiondesabsences.gestiondesabsences.controllers.StudentSearchController"
+        prefWidth="800"
+        stylesheets="@../../Design/StudentSearchView.css"
+        prefHeight="500">
+
+    <VBox spacing="15"
+          alignment="TOP_CENTER"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0"
+          style="-fx-padding: 20;">
+
+        <Label text="Search Student"
+               style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <!-- Search Form -->
+        <GridPane hgap="10" vgap="10">
+            <Label text="First Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="firstNameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Last Name:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="lastNameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Button text="Search"
+                    GridPane.rowIndex="2"
+                    GridPane.columnIndex="1"
+                    onAction="#handleSearch"
+                    prefWidth="120"/>
+        </GridPane>
+
+        <Separator/>
+
+        <!-- Result Section -->
+        <VBox spacing="8" fx:id="resultBox" visible="false">
+            <Label text="Student Information"
+                   style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+            <Label fx:id="nameLabel"/>
+            <Label fx:id="classLabel"/>
+            <Label fx:id="majorLabel"/>
+            <Label fx:id="yearLabel"/>
+        </VBox>
+        <Separator />
+
+        <VBox spacing="10" fx:id="statsBox" visible="false">
+            <Label text="📊 Absence Statistics"
+                   styleClass="section-title"/>
+
+            <Label fx:id="totalAbsencesLabel"
+                   styleClass="stat-total"/>
+
+            <TableView fx:id="moduleStatsTable" prefHeight="200">
+                <columns>
+                    <TableColumn fx:id="moduleColumn"
+                                 text="Module"
+                                 prefWidth="260"/>
+
+                    <TableColumn fx:id="countColumn"
+                                 text="Absences"
+                                 prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </VBox>
+
+</AnchorPane>

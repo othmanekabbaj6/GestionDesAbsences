@@ -39,7 +39,9 @@
                     onAction="#handleSchoolYears"/>
 
                <Button text="Majors" styleClass="sidebar-button"
-                       onAction="#handleMajors">
+                       onAction="#handleMajors"/>
+            <Button text="Search" styleClass="sidebar-button"
+                    onAction="#handleSearch">
                <VBox.margin>
                   <Insets bottom="80"/>
                </VBox.margin>

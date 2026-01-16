@@ -68,5 +68,13 @@ public class StudentService {
         }
     }
 
+    public Student searchStudentsByName(String firstName, String lastName) {
+        try {
+            return studentDAO.getStudentByName(firstName, lastName);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to search students", e);
+        }
+    }
+
 
 }
